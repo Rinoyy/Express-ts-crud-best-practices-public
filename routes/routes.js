@@ -1,24 +1,59 @@
-// routes/routes.js
+// routes/itemRoutes.js
 
 const express = require("express");
 const multer = require("multer");
-
-const { handleInput, deleteItem,  getData,  } = require('../controllers/controller'); 
-// const { handleInput, deleteItem, updateItem, getData, show } = require('../controllers/controller'); 
-
 const router = express.Router();
 const upload = multer();
-const validateItem = require("../Validation/UserValidation");
 
-// router.post("/input", validateItem, (req, res) => {
-//     // Logika untuk menambahkan item ke database
-//     res.status(201).json({ message: "Item berhasil ditambahkan", item: req.body });
-//   });
-  
-router.post("/input", validateItem,   handleInput);
-router.get("/get",  getData);
-// router.get("/show/:id",  show);
-router.delete('/items/:id', deleteItem);
-// router.post('/itemsUpdate/:id', upload.none(), updateItem);
+// Controllers
+const {
+  getAllItems,
+  getItemById,
+  createItem,
+  updateItem,
+  deleteItem,
+} = require("../controllers/itemController");
+
+// Middleware Validation
+const validateItem = require("../validation/itemValidation");
+
+// ===========================
+// Routes
+// ===========================
+
+/**
+ * @route   GET /api/items
+ * @desc    Get all items
+ * @access  Public
+ */
+router.get("/", getAllItems);
+
+/**
+ * @route   GET /api/items/:id
+ * @desc    Get single item by ID
+ * @access  Public
+ */
+router.get("/:id", getItemById);
+
+/**
+ * @route   POST /api/items
+ * @desc    Create new item
+ * @access  Public
+ */
+router.post("/", validateItem, createItem);
+
+/**
+ * @route   PUT /api/items/:id
+ * @desc    Update item by ID
+ * @access  Public
+ */
+router.put("/:id", upload.none(), validateItem, updateItem);
+
+/**
+ * @route   DELETE /api/items/:id
+ * @desc    Delete item by ID
+ * @access  Public
+ */
+router.delete("/:id", deleteItem);
 
 module.exports = router;
