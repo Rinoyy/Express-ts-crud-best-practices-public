@@ -15,7 +15,10 @@ const {
 } = require("../controllers/itemController");
 
 // Middleware Validation
-const validateItem = require("../validation/itemValidation");
+const {
+  validateItemCreate,
+  validateItemUpdate,
+} = require("../validation/itemValidation");
 
 // ===========================
 // Routes
@@ -40,14 +43,14 @@ router.get("/:id", getItemById);
  * @desc    Create new item
  * @access  Public
  */
-router.post("/", validateItem, createItem);
+router.post("/", validateItemCreate, createItem);
 
 /**
  * @route   PUT /api/items/:id
  * @desc    Update item by ID
  * @access  Public
  */
-router.put("/:id", upload.none(), validateItem, updateItem);
+router.put("/:id", upload.none(), validateItemUpdate, updateItem);
 
 /**
  * @route   DELETE /api/items/:id
